@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themeDataAndBloc/bloc/counter_bloc.dart';
+import 'package:themeDataAndBloc/bloc/theme_bloc.dart';
 
 void main() {
   runApp(const HomePage());
@@ -15,11 +18,15 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
           Center(
-            child: Text(
-              "text",
-              style: TextStyle(
-                fontSize: 15.0,
-              ),
+            child: BlocBuilder<CounterBloc, int>(
+              builder: (context, state) {
+                return Text(
+                  "$state",
+                  style: TextStyle(
+                    fontSize: 40.0,
+                  ),
+                );
+              },
             ),
           ),
           Container(
@@ -27,15 +34,15 @@ class HomePage extends StatelessWidget {
               children: [
                 FloatingActionButton(
                   child: const Icon(Icons.add),
-                  onPressed: () {},
+                  onPressed: () => context.read()<CounterBloc>().increment(),
                 ),
                 FloatingActionButton(
                   child: const Icon(Icons.remove),
-                  onPressed: () {},
+                  onPressed: () => context.read()<CounterBloc>().decrement(),
                 ),
                 FloatingActionButton(
                   child: const Icon(Icons.colorize),
-                  onPressed: () {},
+                  onPressed: () => context.read()<ThemeBloc>().changeTheme(),
                 ),
               ],
             ),

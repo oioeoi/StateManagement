@@ -1,18 +1,30 @@
 import 'package:flutter/material.dart';
-
-import 'home_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:themeDataAndBloc/bloc/counter_bloc.dart';
+import 'package:themeDataAndBloc/bloc/theme_bloc.dart';
+import 'package:themeDataAndBloc/home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ThemeData dark = ThemeData.dark();
+  final ThemeData light = ThemeData.light();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ThemeBloc>(create: (context) => ThemeBloc()),
+        BlocProvider<CounterBloc>(create: (context) => CounterBloc()),
+      ],
+      child: BlocBuilder<ThemeBloc, bool>(
+          builder: (context, state) => MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: state ? dark : light,
+                home: HomePage(),
+              )),
     );
   }
 }
