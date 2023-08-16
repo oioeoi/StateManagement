@@ -13,12 +13,18 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-          Center(
-            child: BlocBuilder<CounterBloc, int>(
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            FloatingActionButton(
+              child: const Icon(Icons.remove),
+              onPressed: () => context.read<CounterBloc>().decrement(),
+            ),
+            SizedBox(
+              width: 50,
+            ),
+            BlocBuilder<CounterBloc, int>(
               builder: (context, state) {
                 return Text(
                   "$state",
@@ -28,25 +34,20 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-          ),
-          Container(
-            child: Column(
-              children: [
-                FloatingActionButton(
-                  child: const Icon(Icons.add),
-                  onPressed: () => context.read()<CounterBloc>().increment(),
-                ),
-                FloatingActionButton(
-                  child: const Icon(Icons.remove),
-                  onPressed: () => context.read()<CounterBloc>().decrement(),
-                ),
-                FloatingActionButton(
-                  child: const Icon(Icons.colorize),
-                  onPressed: () => context.read()<ThemeBloc>().changeTheme(),
-                ),
-              ],
+            SizedBox(
+              width: 50,
             ),
-          )
-        ]));
+            FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () => context.read<CounterBloc>().increment(),
+            ),
+          ],
+        )
+      ]),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.colorize),
+        onPressed: () => context.read<ThemeBloc>().changeTheme(),
+      ),
+    );
   }
 }
