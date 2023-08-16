@@ -24,35 +24,22 @@ class HomePage extends StatelessWidget {
             SizedBox(
               width: 50,
             ),
-            MultiBlocListener(
-              listeners: [
-                BlocListener<CounterBloc, int>(
-                  listener: (context, state) {
-                    // TODO: implement listener
-                    if (state > 10) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        duration: Duration(milliseconds: 400),
-                        content: Text('number ofer than 10'),
-                      ));
-                    }
-                    ;
-                    if (state % 5 == 0) {
-                      context.read<ThemeBloc>().changeTheme();
-                    }
-                  },
-                ),
-              ],
-              child: BlocBuilder<CounterBloc, int>(
-                builder: (context, state) {
-                  return Text(
-                    "$state",
-                    style: TextStyle(
-                      fontSize: 40.0,
+            BlocConsumer<CounterBloc, int>(
+                buildWhen: (previous, current) =>
+                    current % 2 == 0 ? true : false,
+                builder: (context, state) => Text(
+                      "$state",
+                      style: TextStyle(
+                        fontSize: 40.0,
+                      ),
                     ),
-                  );
-                },
-              ),
-            ),
+                listenWhen: (previous, current) =>
+                    current % 2 == 0 ? true : false,
+                listener: (context, state) =>
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      duration: Duration(milliseconds: 400),
+                      content: Text('number habis dibagi 2'),
+                    ))),
             SizedBox(
               width: 50,
             ),
