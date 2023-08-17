@@ -28,14 +28,13 @@ class HomePage extends StatelessWidget {
               listeners: [
                 BlocListener<CounterBloc, int>(
                   listener: (context, state) {
-                    // TODO: implement listener
+                    // Todo: implement listener
                     if (state > 10) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         duration: Duration(milliseconds: 400),
                         content: Text('number ofer than 10'),
                       ));
                     }
-                    ;
                     if (state % 5 == 0) {
                       context.read<ThemeBloc>().changeTheme();
                     }
@@ -70,3 +69,21 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+
+// BlocConsumer<CounterBloc, int>(
+//                 buildWhen: (previous, current) =>
+//                     current % 2 == 0 ? true : false,
+//                 builder: (context, state) => Text(
+//                       "$state",
+//                       style: TextStyle(
+//                         fontSize: 40.0,
+//                       ),
+//                     ),
+//                 listenWhen: (previous, current) =>
+//                     current % 2 == 0 ? true : false,
+//                 listener: (context, state) =>
+//                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//                       duration: Duration(milliseconds: 400),
+//                       content: Text('number habis dibagi 2'),
+//                     ))),
