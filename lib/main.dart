@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:themeDataAndBloc/bloc/counter_bloc.dart';
 import 'package:themeDataAndBloc/bloc/theme_bloc.dart';
-import 'package:themeDataAndBloc/home_page.dart';
+import 'package:themeDataAndBloc/pages/home_http_post.dart';
+// import 'package:themeDataAndBloc/pages/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,9 +22,10 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeBloc, bool>(
           builder: (context, state) => MaterialApp(
-                debugShowCheckedModeBanner: false,
-                theme: state ? dark : light,
-                home: HomePage(),
+              debugShowCheckedModeBanner: false,
+              theme: state ? dark : light,
+              home: HttpPage()
+              // HomePage(),
               )),
     );
   }
