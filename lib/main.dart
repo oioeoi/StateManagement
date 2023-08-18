@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:themeDataAndBloc/bloc/counter_bloc.dart';
 import 'package:themeDataAndBloc/bloc/theme_bloc.dart';
 import 'package:themeDataAndBloc/pages/home_http_post.dart';
+
+import 'models/textformfield.dart';
 // import 'package:themeDataAndBloc/pages/home_page.dart';
 
 void main() {
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
           builder: (context, state) => MaterialApp(
               debugShowCheckedModeBanner: false,
               theme: state ? dark : light,
-              home: HttpPage()
+              home: Scaffold(body: EmailFormField())
               // HomePage(),
               )),
     );

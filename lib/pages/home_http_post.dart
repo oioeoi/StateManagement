@@ -48,21 +48,28 @@ class _HttpPageState extends State<HttpPage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              onFieldSubmitted: (value) {
-                //ketika sudah ngisi maka akan langung diarahin ngisi field ke 2
-                FocusScope.of(context).requestFocus(_jobFocusNode);
-              },
-              controller: _nameController,
-              decoration: InputDecoration(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12.0),
+                ),
+              ),
+              child: TextFormField(
+                onFieldSubmitted: (value) {
+                  //ketika sudah ngisi maka akan langung diarahin ngisi field ke 2
+                  FocusScope.of(context).requestFocus(_jobFocusNode);
+                },
+                controller: _nameController,
+                decoration: InputDecoration(
                   hintText: (dataResponse.name == '')
                       ? 'tidak ada nama'
                       : dataResponse.name,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                  filled: true,
-                  fillColor: Colors.green[100],
-                  border: InputBorder.none),
+                  border: InputBorder.none,
+                ),
+              ),
             ),
           ),
           Padding(
@@ -75,21 +82,28 @@ class _HttpPageState extends State<HttpPage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: TextFormField(
-              onFieldSubmitted: (value) {
-                //ketika sudah ngisi maka akan langung diarahin ngisi field ke 2
-                FocusScope.of(context).requestFocus();
-              },
-              controller: _jobController,
-              decoration: InputDecoration(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(12.0),
+                ),
+                color: Colors.blue[50],
+              ),
+              child: TextFormField(
+                onFieldSubmitted: (value) {
+                  //ketika sudah ngisi maka akan langung diarahin ngisi field ke 2
+                  FocusScope.of(context).requestFocus();
+                },
+                controller: _jobController,
+                decoration: InputDecoration(
                   hintText: (dataResponse.job == '')
                       ? 'tidak ada job'
                       : dataResponse.job,
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                  filled: true,
-                  fillColor: Colors.green[100],
-                  border: InputBorder.none),
+                  border: InputBorder.none,
+                ),
+              ),
             ),
           ),
           SizedBox(

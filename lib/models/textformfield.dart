@@ -1,22 +1,23 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class SignInWithValidationAndDebounce extends StatefulWidget {
-  const SignInWithValidationAndDebounce({Key? key}) : super(key: key);
+class EmailFormField extends StatefulWidget {
+  EmailFormField({Key? key}) : super(key: key);
 
   @override
-  State<SignInWithValidationAndDebounce> createState() =>
-      _SignInWithValidationAndDebounceState();
+  State<EmailFormField> createState() => _EmailFormFieldState();
 }
 
-class _SignInWithValidationAndDebounceState
-    extends State<SignInWithValidationAndDebounce> {
+class _EmailFormFieldState extends State<EmailFormField> {
   Timer? debounce;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _emailValid = true;
   bool _passwordValid = true;
+  bool _isPasswordVisible = false;
+  String password = '';
+  String email = '';
 
   @override
   void dispose() {
@@ -27,55 +28,207 @@ class _SignInWithValidationAndDebounceState
   }
 
   @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'Sign In',
-            style: TextStyle(
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Email',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              TextFormField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.done,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(20),
+                  filled: true,
+                  fillColor: Colors.blue.shade50,
+                  hintText: 'yourEmail@example.com',
+                  hintStyle: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.blue.shade100,
+                      )),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.blue.shade100,
+                      )),
+                  suffixIcon: _emailController.text.isEmpty
+                      ? Container(
+                          width: 0,
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.close),
+                          onPressed: () => _emailController.clear(),
+                        ),
+                  errorText: _emailValid ? null : 'Please enter a valid email',
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                      )),
+                  errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                      )),
+                ),
+                onFieldSubmitted: (value) => setState(() {
+                  ///ketika klik done dipojok keyboard
+                  this.email = value;
+                }),
+                onChanged: (String value) {
+                  if (debounce?.isActive ?? false) debounce?.cancel();
+                  debounce = Timer(Duration(milliseconds: 500), () {
+                    setState(() {
+                      _emailValid = validateEmail(value) == null;
+                      this.email = value;
+                    });
+                  });
+                },
+              ),
+            ],
           ),
-          const SizedBox(height: 16.0),
-          TextFormField(
-            controller: _emailController,
-            decoration: InputDecoration(
-              labelText: 'Email',
-              errorText: _emailValid ? null : 'Please enter a valid email',
-            ),
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (String value) {
-              if (debounce?.isActive ?? false) debounce?.cancel();
-              debounce = Timer(const Duration(milliseconds: 500), () {
-                setState(() {
-                  _emailValid = validateEmail(value) == null;
-                });
+          SizedBox(
+            height: 16,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(
+                  text: '',
+                  style: DefaultTextStyle.of(context).style,
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Password',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '*',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
+                obscureText: _isPasswordVisible,
+                obscuringCharacter: '*',
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(20),
+                  filled: true,
+                  fillColor: Colors.blue.shade50,
+                  hintText: 'Password',
+                  hintStyle: TextStyle(
+                    color: Colors.grey[500],
+                  ),
+                  suffixIcon: IconButton(
+                      icon: _isPasswordVisible
+                          ? Icon(Icons.visibility_off)
+                          : Icon(Icons.visibility),
+                      onPressed: () => setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          })),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.blue.shade100,
+                      )),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.blue.shade100,
+                      )),
+                  errorText: _passwordValid
+                      ? null
+                      : 'Password must be at least 8 characters long',
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                      )),
+                  errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: Colors.red,
+                      )),
+                ),
+                onFieldSubmitted: (value) => setState(() {
+                  this.password = value;
+                }),
+                onChanged: (value) {
+                  if (debounce?.isActive ?? false) debounce?.cancel();
+                  debounce = Timer(Duration(milliseconds: 500), () {
+                    setState(() {
+                      _passwordValid = validatePassword(value) == null;
+                      this.password = value;
+                    });
+                  });
+                },
+              ),
+            ],
+          ),
+          SizedBox(height: 10.0),
+          ElevatedButton(
+            child: Text('Submit'),
+            onPressed: () {
+              setState(() {
+                _emailController.clear();
+                _passwordController.clear();
               });
             },
-          ),
-          TextFormField(
-            controller: _passwordController,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              errorText: _passwordValid
-                  ? null
-                  : 'Password must be at least 8 characters long',
-            ),
-            obscureText: true,
-            onChanged: (String value) {
-              if (debounce?.isActive ?? false) debounce?.cancel();
-              debounce = Timer(const Duration(milliseconds: 500), () {
-                setState(() {
-                  _passwordValid = validatePassword(value) == null;
-                });
-              });
-            },
-          ),
-          const SizedBox(height: 8.0),
-          ElevatedButton(onPressed: () {}, child: const Text('Submit'))
+          )
         ],
       ),
     );
