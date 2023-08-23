@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:themeDataAndBloc/models/http_req_post.dart';
+import 'package:themeDataAndBloc/services/httpstateful.dart';
 // import '../models/textformfield.dart';
 
-class HttpPage extends StatefulWidget {
-  HttpPage({super.key});
+class HttpPageStateful extends StatefulWidget {
+  HttpPageStateful({super.key});
 
   @override
-  State<HttpPage> createState() => _HttpPageState();
+  State<HttpPageStateful> createState() => _HttpPageStatefulState();
 }
 
-class _HttpPageState extends State<HttpPage> {
+class _HttpPageStatefulState extends State<HttpPageStateful> {
   HttpStatefull dataResponse = HttpStatefull();
 
   final _nameController = TextEditingController();
@@ -115,7 +115,7 @@ class _HttpPageState extends State<HttpPage> {
                       _nameController.text, _jobController.text)
                   .then((value) {
                 setState(() {
-                  dataResponse = value;
+                  dataResponse = value as HttpStatefull;
                   _submitForm();
                 });
               });
